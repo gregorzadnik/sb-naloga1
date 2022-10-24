@@ -11,20 +11,53 @@ def return_decimal_number(img, row, col, center, n):
     binary_matrix = (box >= box[center])*1.0
 
     vector = []
-    vector.append(binary_matrix[center-1][center-1]) # Top left
-    vector.append(binary_matrix[center-1][center]) # Top
-    vector.append(binary_matrix[center-1][center+1]) # Top right
-    vector.append(binary_matrix[center][center-1]) # Right 
-    vector.append(binary_matrix[center+1][center+1]) # Bottom right
-    vector.append(binary_matrix[center+1][center]) # Bottom
-    vector.append(binary_matrix[center+1][center-1]) # Bottom left
-    vector.append(binary_matrix[center][center-1]) # Left
-    
     value = 0
-    for i in range(0, len(vector)):
-        add = 2**i * vector[i]
-        value += add
-        #print(add)
+    # If the center (radius or R) is 1, look at the 8 surrounding pixels
+    if(center == 1):
+        vector.append(binary_matrix[center-1][center-1]) # Top left
+        vector.append(binary_matrix[center-1][center]) # Top
+        vector.append(binary_matrix[center-1][center+1]) # Top right
+        vector.append(binary_matrix[center][center-1]) # Right 
+        vector.append(binary_matrix[center+1][center+1]) # Bottom right
+        vector.append(binary_matrix[center+1][center]) # Bottom
+        vector.append(binary_matrix[center+1][center-1]) # Bottom left
+        vector.append(binary_matrix[center][center-1]) # Left
+
+        for i in range(0, len(vector)):
+            add = 2**i * vector[i]
+            value += add
+            #print(add)
+
+    # If the radius is 2, look at the 16 surrounding pixels
+    # and normalize the value to between 0 and 255
+    elif(center == 2):
+        # Top row
+        vector.append(binary_matrix[center-2][center-2])
+        vector.append(binary_matrix[center-2][center-1])
+        vector.append(binary_matrix[center-2][center])
+        vector.append(binary_matrix[center-2][center+1])
+        vector.append(binary_matrix[center-2][center+2])
+        # Right side
+        vector.append(binary_matrix[center-1][center+2])
+        vector.append(binary_matrix[center][center+2])
+        vector.append(binary_matrix[center+1][center+2])
+        # Bottom row
+        vector.append(binary_matrix[center+2][center+2])
+        vector.append(binary_matrix[center+2][center+1])
+        vector.append(binary_matrix[center+2][center])
+        vector.append(binary_matrix[center+2][center-1])
+        vector.append(binary_matrix[center+2][center-2])
+        # Left side
+        vector.append(binary_matrix[center+1][center-2])
+        vector.append(binary_matrix[center][center-2])
+        vector.append(binary_matrix[center-1][center-2])
+
+        for i in range(0, len(vector)):
+            add = 2**i * vector[i]
+            value += add
+            #print(add)
+        # Divide the value by 256 to normalize
+        value //= 256
     
     #print(box)
     #print(binary_matrix)
