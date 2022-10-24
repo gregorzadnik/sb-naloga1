@@ -33,16 +33,6 @@ def return_decimal_number(img, row, col, center, n):
 
     return value
 
-# A function that receives the computed LBP matrix as input and
-# returns a histogram (vector of length 256) of the values
-def return_histogram(LBP_matrix):
-    histogram = np.zeros(256)
-    for i in range(len(LBP_matrix)):
-        for j in range(len(LBP_matrix[0])):
-            value = LBP_matrix[i][j]
-            histogram[value] += 1
-    return histogram
-
 
 
 # A function that receives a path to an image and a radius as parameters
@@ -76,11 +66,19 @@ def return_LBP(image_path, radius):
     #cv2.waitKey(0)
     return LBP_matrix
 
+# A function that receives the computed LBP matrix as input and
+# returns a histogram (vector of length 256) of the values
+def return_histogram(image_path):
+    LBP_matrix = return_LBP(image_path, 1)
+    histogram = np.zeros(256)
+    for i in range(len(LBP_matrix)):
+        for j in range(len(LBP_matrix[0])):
+            value = LBP_matrix[i][j]
+            histogram[value] += 1
+    return histogram
+
+
+
 def return_all_images(path):
     return [y for x in os.walk(path) for y in glob(os.path.join(x[0], '*.png'))]
 
-path = ".\\awe"
-image_paths = return_all_images(path)
-print(len(image_paths))
-LBP_matrix = return_LBP(path, 1)
-histogram = return_histogram(LBP_matrix)
